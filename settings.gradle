@@ -1,0 +1,13 @@
+rootProject.name = 'khong-gian-truyen-backend'
+include 'configuration'
+include 'common'
+include 'adapters'
+include 'adapters:persistence'
+//findProject(':adapters:persistence')?.name = 'persistence'
+include 'adapters:web'
+//findProject(':adapters:web')?.name = 'web'
+include 'domain'
+include 'usecase'
+include 'usecase-impl'
+include 'api'
+

@@ -1,0 +1,11 @@
+dependencies {
+    implementation project(':common')
+    implementation project(':domain')
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,57 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+subprojects {
+
+    group = 'com.codehunter.khonggiantruyen'
+    version = '1.0-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java-library'
+
+    repositories {
+        mavenCentral()
+//        jcenter()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom('org.springframework.boot:spring-boot-dependencies:2.4.4')
+        }
+    }
+
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    task customBuildAll(dependsOn: ['build']) {
+        doLast {
+            project -> println "build for $project"
+        }
+    }
+
+}
+
+task stage(dependsOn: [':configuration:build']) {
+    doLast {
+        copy {
+            println "finish build $project"
+            def buildPath = project('configuration').buildDir
+            from "$buildPath/libs"
+            into "$buildDir/libs"
+        }
+    }
+}
+
+task copyToBuild(type: Copy) {
+    println "finish build $project"
+    def buildPath = project('configuration').buildDir
+    from "$buildPath/libs"
+    into "$buildDir/libs"
+}
+
+apply from: file('setupTestsReports.gradle')
+

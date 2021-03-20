@@ -1,0 +1,17 @@
+dependencies {
+    implementation project(':common')
+    implementation project(':domain')
+    implementation project(':usecase')
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'jakarta.transaction:jakarta.transaction-api'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}
+apply from: file('../setupTestsReports.gradle')
