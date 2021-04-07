@@ -1,5 +1,6 @@
 package com.codehunter.khonggiantruyen.peristence.entity;
 
+import com.codehunter.khonggiantruyen.domain.EFormatType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

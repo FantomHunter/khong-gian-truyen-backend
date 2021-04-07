@@ -1,4 +1,4 @@
-package com.codehunter.khonggiantruyen.peristence.entity;
+package com.codehunter.khonggiantruyen.domain;
 
 public enum EFormatType {
     PRC, PDF, EPUB, MOBI, AZW3
