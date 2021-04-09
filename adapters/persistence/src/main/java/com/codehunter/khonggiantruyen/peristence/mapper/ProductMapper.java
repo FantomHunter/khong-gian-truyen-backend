@@ -45,4 +45,6 @@ public class ProductMapper {
                 productDao.getType()
         );
     }
+
+
 }

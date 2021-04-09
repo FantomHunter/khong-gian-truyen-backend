@@ -1,6 +1,7 @@
 package com.codehunter.khonggiantruyen.peristence;
 
 import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
+import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
 import com.codehunter.khonggiantruyen.domain.EProductStatus;
 import com.codehunter.khonggiantruyen.domain.EProductType;
 import com.codehunter.khonggiantruyen.domain.Product;
@@ -11,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @Import({ProductPersistenceAdapter.class, ProductMapper.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -51,5 +54,47 @@ public class ProductAdapterTest {
                 EProductType.TRANSLATED
         );
         ICreateSimpleProductUseCase.CreateSimpleProductDataOut actual = adapterUnderTest.createSimpleProduct(in);
+    }
+
+    @Test
+    @Sql("product.sql")
+    void getAllProduct_withOrderById_theReturn3Product() {
+        IGetAllProductUseCase.GetAllProductDataOut actual = adapterUnderTest.getAllProduct(new IGetAllProductUseCase.GetAllProductDataIn(
+                0, 10, IGetAllProductUseCase.GetAllProductDataIn.EOrder.BY_ID));
+
+        assertNotNull(actual);
+        assertNotNull(actual.getProductList());
+        assertEquals(3, actual.getProductList().size());
+        assertEquals(1L, actual.getProductList().get(0).getId().getValue());
+        assertEquals(2L, actual.getProductList().get(1).getId().getValue());
+        assertEquals(3L, actual.getProductList().get(2).getId().getValue());
+    }
+
+    @Test
+    @Sql("product.sql")
+    void getAllProduct_withOrderByComment_theReturn3OrderedProduct() {
+        IGetAllProductUseCase.GetAllProductDataOut actual = adapterUnderTest.getAllProduct(new IGetAllProductUseCase.GetAllProductDataIn(
+                0, 10, IGetAllProductUseCase.GetAllProductDataIn.EOrder.BY_COMMENT));
+
+        assertNotNull(actual);
+        assertNotNull(actual.getProductList());
+        assertEquals(3, actual.getProductList().size());
+        assertEquals(2L, actual.getProductList().get(0).getId().getValue());
+        assertEquals(3L, actual.getProductList().get(1).getId().getValue());
+        assertEquals(1L, actual.getProductList().get(2).getId().getValue());
+    }
+
+    @Test
+    @Sql("product.sql")
+    void getAllProduct_withOrderByPublishDate_theReturn3OrderedProduct() {
+        IGetAllProductUseCase.GetAllProductDataOut actual = adapterUnderTest.getAllProduct(new IGetAllProductUseCase.GetAllProductDataIn(
+                0, 10, IGetAllProductUseCase.GetAllProductDataIn.EOrder.BY_TIME));
+
+        assertNotNull(actual);
+        assertNotNull(actual.getProductList());
+        assertEquals(3, actual.getProductList().size());
+        assertEquals(1L, actual.getProductList().get(0).getId().getValue());
+        assertEquals(3L, actual.getProductList().get(1).getId().getValue());
+        assertEquals(2L, actual.getProductList().get(2).getId().getValue());
     }
 }
