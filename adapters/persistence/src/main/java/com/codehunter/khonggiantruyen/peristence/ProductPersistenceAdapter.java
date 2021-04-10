@@ -7,10 +7,12 @@ import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
 import com.codehunter.khonggiantruyen.core.port.out.ICreateProductPort;
 import com.codehunter.khonggiantruyen.core.port.out.IDeleteProductPort;
 import com.codehunter.khonggiantruyen.core.port.out.IGetAllProductPort;
+import com.codehunter.khonggiantruyen.core.port.out.IHasProductPort;
 import com.codehunter.khonggiantruyen.domain.Product;
 import com.codehunter.khonggiantruyen.peristence.entity.ProductDao;
 import com.codehunter.khonggiantruyen.peristence.mapper.ProductMapper;
 import com.codehunter.khonggiantruyen.peristence.repository.ProductRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.cfg.NotYetImplementedException;
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @PersistenceAdapter
 @Slf4j
-public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllProductPort, IDeleteProductPort {
+public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllProductPort, IDeleteProductPort, IHasProductPort {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
@@ -71,5 +73,10 @@ public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllPro
     @Override
     public void deleteProduct(IDeleteProductUseCase.DeleteProductDataIn in) {
         productRepository.deleteById(in.getId());
+    }
+
+    @Override
+    public Boolean hasProductWithId(@NonNull Long id) {
+        return productRepository.existsById(id);
     }
 }
