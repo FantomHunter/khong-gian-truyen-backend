@@ -2,8 +2,10 @@ package com.codehunter.khonggiantruyen.peristence;
 
 import com.codehunter.khonggiantruyen.PersistenceAdapter;
 import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
+import com.codehunter.khonggiantruyen.core.port.in.IDeleteProductUseCase;
 import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
 import com.codehunter.khonggiantruyen.core.port.out.ICreateProductPort;
+import com.codehunter.khonggiantruyen.core.port.out.IDeleteProductPort;
 import com.codehunter.khonggiantruyen.core.port.out.IGetAllProductPort;
 import com.codehunter.khonggiantruyen.domain.Product;
 import com.codehunter.khonggiantruyen.peristence.entity.ProductDao;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @PersistenceAdapter
 @Slf4j
-public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllProductPort {
+public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllProductPort, IDeleteProductPort {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
@@ -64,5 +66,10 @@ public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllPro
         }
         result.getProductList().addAll(productList);
         return result;
+    }
+
+    @Override
+    public void deleteProduct(IDeleteProductUseCase.DeleteProductDataIn in) {
+        productRepository.deleteById(in.getId());
     }
 }

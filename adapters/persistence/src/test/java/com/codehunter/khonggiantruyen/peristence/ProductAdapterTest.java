@@ -1,11 +1,13 @@
 package com.codehunter.khonggiantruyen.peristence;
 
 import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
+import com.codehunter.khonggiantruyen.core.port.in.IDeleteProductUseCase;
 import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
 import com.codehunter.khonggiantruyen.domain.EProductStatus;
 import com.codehunter.khonggiantruyen.domain.EProductType;
 import com.codehunter.khonggiantruyen.domain.Product;
 import com.codehunter.khonggiantruyen.peristence.mapper.ProductMapper;
+import com.codehunter.khonggiantruyen.peristence.repository.CommentRepository;
 import com.codehunter.khonggiantruyen.peristence.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @DataJpaTest
 @Import({ProductPersistenceAdapter.class, ProductMapper.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -27,6 +31,8 @@ public class ProductAdapterTest {
     ProductPersistenceAdapter adapterUnderTest;
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    CommentRepository commentRepository;
 
     @Test
     void createSimpleProduct_withValidInput_thenNewProductReturn() {
@@ -96,5 +102,30 @@ public class ProductAdapterTest {
         assertEquals(1L, actual.getProductList().get(0).getId().getValue());
         assertEquals(3L, actual.getProductList().get(1).getId().getValue());
         assertEquals(2L, actual.getProductList().get(2).getId().getValue());
+    }
+
+    @Test
+    @Sql("product.sql")
+    void deleteProduct_withExistId_thenSuccess() {
+        // before
+        IGetAllProductUseCase.GetAllProductDataOut before = adapterUnderTest.getAllProduct(new IGetAllProductUseCase.GetAllProductDataIn(
+                0, 10, IGetAllProductUseCase.GetAllProductDataIn.EOrder.BY_ID));
+
+        assertNotNull(before);
+        assertNotNull(before.getProductList());
+        assertEquals(3, before.getProductList().size());
+        assertEquals(6, commentRepository.findAll().size());
+
+        adapterUnderTest.deleteProduct(new IDeleteProductUseCase.DeleteProductDataIn(2L));
+
+        // after
+        IGetAllProductUseCase.GetAllProductDataOut after = adapterUnderTest.getAllProduct(new IGetAllProductUseCase.GetAllProductDataIn(
+                0, 10, IGetAllProductUseCase.GetAllProductDataIn.EOrder.BY_ID));
+
+        assertNotNull(after);
+        assertNotNull(after.getProductList());
+        assertEquals(2, after.getProductList().size());
+        // the comment of the product is also removed
+        assertEquals(3, commentRepository.findAll().size());
     }
 }

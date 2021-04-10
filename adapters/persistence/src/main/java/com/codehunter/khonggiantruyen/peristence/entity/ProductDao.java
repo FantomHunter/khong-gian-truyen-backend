@@ -47,8 +47,8 @@ public class ProductDao {
     private List<ResourceDownloadDao> resourceDownloadList = new ArrayList<>();
     @OneToMany(mappedBy = "product")
     private List<LikedDao> likedList = new ArrayList<>();
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentDao> commentedList = new ArrayList<>();
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RatingDao> ratingList = new ArrayList<>();
 }

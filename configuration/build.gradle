@@ -4,6 +4,8 @@
 
 dependencies {
     implementation project(':adapters:persistence')
+    implementation project(':adapters:web')
+    implementation project(':usecase-impl')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

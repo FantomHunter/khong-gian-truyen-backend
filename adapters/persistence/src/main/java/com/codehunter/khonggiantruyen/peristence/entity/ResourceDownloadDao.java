@@ -25,6 +25,6 @@ public class ResourceDownloadDao {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductDao product;
-    @OneToMany(mappedBy = "resourceDownload")
+    @OneToMany(mappedBy = "resourceDownload", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DownloadDao> downloadList = new ArrayList<>();
 }
