@@ -1,16 +1,21 @@
-//plugins {
-//    id 'org.springframework.boot' version '2.4.4'
-//}
-
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
 dependencies {
     implementation project(':adapters:persistence')
     implementation project(':adapters:web')
     implementation project(':usecase-impl')
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'mysql:mysql-connector-java'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 test {

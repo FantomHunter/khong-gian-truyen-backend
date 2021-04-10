@@ -6,6 +6,9 @@ import com.codehunter.khonggiantruyen.adapter.web.api.common.ProductDto;
 import com.codehunter.khonggiantruyen.domain.Product;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class ProductApiMapper {
     public ProductDto mapToProductDto(Product product) {
@@ -19,5 +22,11 @@ public class ProductApiMapper {
                 product.getTotalChapter(),
                 EProductType.valueOf(product.getType().toString())
         );
+    }
+
+    public List<ProductDto> mapToProductDtoList(List<Product> productList) {
+        return productList.stream()
+                .map(this::mapToProductDto)
+                .collect(Collectors.toList());
     }
 }

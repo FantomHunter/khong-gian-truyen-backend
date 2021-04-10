@@ -16,7 +16,7 @@ public interface IGetAllProductUseCase {
     @EqualsAndHashCode(callSuper = false)
     class GetAllProductDataIn extends SelfValidating<GetAllProductDataIn> {
         @NonNull
-        Integer start;
+        Integer page;
         @NonNull
         Integer size;
         @NonNull

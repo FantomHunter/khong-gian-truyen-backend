@@ -41,21 +41,21 @@ public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllPro
         switch (in.getOrderBy()) {
             case BY_ID:
                 productList = productRepository
-                        .findAll(PageRequest.of(in.getStart(), in.getSize(), Sort.by("id")))
+                        .findAll(PageRequest.of(in.getPage(), in.getSize(), Sort.by("id")))
                         .stream()
                         .map(productMapper::mapToProduct)
                         .collect(Collectors.toList());
                 break;
             case BY_COMMENT:
                 productList = productRepository
-                        .findAllProductOrderByCommentCountDesc(PageRequest.of(in.getStart(), in.getSize()))
+                        .findAllProductOrderByCommentCountDesc(PageRequest.of(in.getPage(), in.getSize()))
                         .stream()
                         .map(productMapper::mapToProduct)
                         .collect(Collectors.toList());
                 break;
             case BY_TIME:
                 productList = productRepository
-                        .findAll(PageRequest.of(in.getStart(), in.getSize(), Sort.by(Sort.Direction.DESC, "publishDate")))
+                        .findAll(PageRequest.of(in.getPage(), in.getSize(), Sort.by(Sort.Direction.DESC, "publishDate")))
                         .stream()
                         .map(productMapper::mapToProduct)
                         .collect(Collectors.toList());
