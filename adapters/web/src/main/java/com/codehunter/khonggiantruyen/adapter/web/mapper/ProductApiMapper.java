@@ -14,8 +14,8 @@ public class ProductApiMapper {
     public ProductDto mapToProductDto(Product product) {
         return new ProductDto(
                 product.getId().getValue(),
-                product.getImageUrl(),
                 product.getDescription(),
+                product.getImageUrl(),
                 product.getName(),
                 product.getPublishDate(),
                 EProductStatus.valueOf(product.getStatus().toString()),
