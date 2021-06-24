@@ -1,13 +1,12 @@
 package com.codehunter.khonggiantruyen.peristence;
 
 import com.codehunter.khonggiantruyen.PersistenceAdapter;
+import com.codehunter.khonggiantruyen.core.exception.EntityNotFoundException;
 import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
 import com.codehunter.khonggiantruyen.core.port.in.IDeleteProductUseCase;
 import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
-import com.codehunter.khonggiantruyen.core.port.out.ICreateProductPort;
-import com.codehunter.khonggiantruyen.core.port.out.IDeleteProductPort;
-import com.codehunter.khonggiantruyen.core.port.out.IGetAllProductPort;
-import com.codehunter.khonggiantruyen.core.port.out.IHasProductPort;
+import com.codehunter.khonggiantruyen.core.port.in.IUpdateProductUseCase;
+import com.codehunter.khonggiantruyen.core.port.out.*;
 import com.codehunter.khonggiantruyen.domain.Product;
 import com.codehunter.khonggiantruyen.peristence.entity.ProductDao;
 import com.codehunter.khonggiantruyen.peristence.mapper.ProductMapper;
@@ -21,19 +20,20 @@ import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @PersistenceAdapter
 @Slf4j
-public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllProductPort, IDeleteProductPort, IHasProductPort {
+public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllProductPort, IDeleteProductPort, IHasProductPort, IUpdateProductPort {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
     @Override
     public ICreateSimpleProductUseCase.CreateSimpleProductDataOut createSimpleProduct(ICreateSimpleProductUseCase.CreateSimpleProductDataIn in) {
         ProductDao productDao = productRepository.save(productMapper.mapToProductDao(in));
-        return productMapper.maptoCreateSimpleProductDataOut(productDao);
+        return productMapper.mapToCreateSimpleProductDataOut(productDao);
     }
 
     @Override
@@ -78,5 +78,15 @@ public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllPro
     @Override
     public Boolean hasProductWithId(@NonNull Long id) {
         return productRepository.existsById(id);
+    }
+
+    @Override
+    public IUpdateProductUseCase.UpdateProductDataOut updateProduct(IUpdateProductUseCase.UpdateProductDataIn in) throws EntityNotFoundException {
+        Optional<ProductDao> productDao = productRepository.findById(in.getProduct().getId().getValue());
+        if (productDao.isPresent()){
+            ProductDao productDaoUpdate = productRepository.save(productMapper.mapToProductDaoWithTarget(in.getProduct(), productDao.get()));
+            return new IUpdateProductUseCase.UpdateProductDataOut(productMapper.mapToProduct(productDaoUpdate));
+        }
+        throw new EntityNotFoundException("Product not found");
     }
 }

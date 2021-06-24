@@ -9,13 +9,13 @@ import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
 import com.codehunter.khonggiantruyen.domain.EProductStatus;
 import com.codehunter.khonggiantruyen.domain.EProductType;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.RestController;
 
 @WebAdapter
 @RestController
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class CreateSimpleProductController implements ICreateSimpleProductApi {
     private final ICreateSimpleProductUseCase createSimpleProductUseCase;
     private final ProductApiMapper productApiMapper;
@@ -23,6 +23,7 @@ public class CreateSimpleProductController implements ICreateSimpleProductApi {
 
     @Override
     public CreateSimpleProductResponse createSimpleProduct(CreateSimpleProductRequest request) {
+        log.info(String.format("createSimpleProduct: %s", request));
         ICreateSimpleProductUseCase.CreateSimpleProductDataIn dataIn = new ICreateSimpleProductUseCase.CreateSimpleProductDataIn(
                 request.getDescription(),
                 request.getImageUrl(),

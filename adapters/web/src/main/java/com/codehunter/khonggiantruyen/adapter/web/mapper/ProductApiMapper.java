@@ -29,4 +29,17 @@ public class ProductApiMapper {
                 .map(this::mapToProductDto)
                 .collect(Collectors.toList());
     }
+
+    public Product mapToProduct(ProductDto productDto) {
+        return new Product(
+                new Product.ProductId(productDto.getId()),
+                productDto.getDescription(),
+                productDto.getImageUrl(),
+                productDto.getName(),
+                productDto.getPublishDate(),
+                com.codehunter.khonggiantruyen.domain.EProductStatus.valueOf(productDto.getStatus().toString()),
+                productDto.getTotalChapter(),
+                com.codehunter.khonggiantruyen.domain.EProductType.valueOf(productDto.getType().toString())
+        );
+    }
 }

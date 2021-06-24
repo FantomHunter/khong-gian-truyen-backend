@@ -5,13 +5,13 @@ VALUES('author');
 
 INSERT INTO product
 (description, image_url, name, publish_date, status, total_chapter, `type`, author_id)
-VALUES('description', 'image_url', 'product name 1', '2020-10-19 16:00:00.0', 'PUBLISHING', 100, 'TRANSLATED', 1);
+VALUES('description', 'http://placehold.it/32x32', 'product name 1', '2020-10-19 16:00:00.0', 'PUBLISHING', 100, 'TRANSLATED', 1);
 INSERT INTO product
 (description, image_url, name, publish_date, status, total_chapter, `type`, author_id)
-VALUES('description', 'image_url', 'product name 2', '2020-10-17 16:00:00.0', 'PUBLISHING', 200, 'TRANSLATED', 1);
+VALUES('description', 'http://placehold.it/32x32', 'product name 2', '2020-10-17 16:00:00.0', 'PUBLISHING', 200, 'TRANSLATED', 1);
 INSERT INTO product
 (description, image_url, name, publish_date, status, total_chapter, `type`, author_id)
-VALUES('description', 'image_url', 'product name 3', '2020-10-18 16:00:00.0', 'PUBLISHING', 300, 'TRANSLATED', 1);
+VALUES('description', 'http://placehold.it/32x32', 'product name 3', '2020-10-18 16:00:00.0', 'PUBLISHING', 300, 'TRANSLATED', 1);
 
 INSERT INTO `user`
 (id, name)

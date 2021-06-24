@@ -1,21 +1,25 @@
 package com.codehunter.khonggiantruyen.adapter.web.api.common;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDto {
     @NotEmpty
-    Long id;
-    String description;
+    private Long id;
+    private String description;
     @NotEmpty
-    String imageUrl;
+    private String imageUrl;
     @NotEmpty
-    String name;
-    Date publishDate;
-    EProductStatus status;
-    Integer totalChapter;
-    EProductType type;
+    private String name;
+    private Date publishDate;
+    private EProductStatus status;
+    private Integer totalChapter;
+    private EProductType type;
 }

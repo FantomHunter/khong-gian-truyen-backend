@@ -1,11 +1,14 @@
 package com.codehunter.khonggiantruyen.peristence;
 
+import com.codehunter.khonggiantruyen.core.exception.EntityNotFoundException;
 import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
 import com.codehunter.khonggiantruyen.core.port.in.IDeleteProductUseCase;
 import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
+import com.codehunter.khonggiantruyen.core.port.in.IUpdateProductUseCase;
 import com.codehunter.khonggiantruyen.domain.EProductStatus;
 import com.codehunter.khonggiantruyen.domain.EProductType;
 import com.codehunter.khonggiantruyen.domain.Product;
+import com.codehunter.khonggiantruyen.peristence.entity.CommentDao;
 import com.codehunter.khonggiantruyen.peristence.mapper.ProductMapper;
 import com.codehunter.khonggiantruyen.peristence.repository.CommentRepository;
 import com.codehunter.khonggiantruyen.peristence.repository.ProductRepository;
@@ -19,6 +22,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -127,5 +131,44 @@ public class ProductAdapterTest {
         assertEquals(2, after.getProductList().size());
         // the comment of the product is also removed
         assertEquals(3, commentRepository.findAll().size());
+    }
+
+    @Test
+    @Sql("product.sql")
+    void updateProduct_withExistId_thenSuccess() throws EntityNotFoundException {
+        // before
+        IGetAllProductUseCase.GetAllProductDataOut before = adapterUnderTest.getAllProduct(new IGetAllProductUseCase.GetAllProductDataIn(
+                0, 10, IGetAllProductUseCase.GetAllProductDataIn.EOrder.BY_ID));
+
+        assertNotNull(before);
+        assertNotNull(before.getProductList());
+        assertEquals(3, before.getProductList().size());
+        assertEquals(6, commentRepository.findAll().size());
+        assertEquals("product name 1", before.getProductList().get(0).getName());
+        assertEquals(1L, before.getProductList().get(0).getId().getValue());
+
+        Date publishDate = new GregorianCalendar(2021, Calendar.OCTOBER, 18, 16, 0, 0).getTime();
+        adapterUnderTest.updateProduct(new IUpdateProductUseCase.UpdateProductDataIn(
+                new Product(
+                        new Product.ProductId(1L),
+                        "description",
+                        "url_link",
+                        "product updated",
+                        publishDate,
+                        EProductStatus.PUBLISHING,
+                        300,
+                        EProductType.TRANSLATED
+                )
+        ));
+
+        // after
+        IGetAllProductUseCase.GetAllProductDataOut after = adapterUnderTest.getAllProduct(new IGetAllProductUseCase.GetAllProductDataIn(
+                0, 10, IGetAllProductUseCase.GetAllProductDataIn.EOrder.BY_ID));
+
+        assertNotNull(after);
+        assertNotNull(after.getProductList());
+        assertEquals("product updated", after.getProductList().get(0).getName());
+        // the comment of the product is still kept
+        assertEquals(6, commentRepository.findAll().size());
     }
 }
