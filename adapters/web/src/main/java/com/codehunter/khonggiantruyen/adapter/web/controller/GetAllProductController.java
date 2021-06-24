@@ -7,20 +7,21 @@ import com.codehunter.khonggiantruyen.adapter.web.api.getallproduct.IGetAllProdu
 import com.codehunter.khonggiantruyen.adapter.web.mapper.ProductApiMapper;
 import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @WebAdapter
 @RestController
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class GetAllProductController implements IGetAllProductApi {
     private final IGetAllProductUseCase getAllProductUseCase;
     private final ProductApiMapper productApiMapper;
 
     @Override
     public GetAllProductResponse getAllProduct(@RequestParam Integer page, @RequestParam Integer size, @RequestParam EOrder order) {
+        log.info(String.format("getAllProduct from page: %d with size: %d by order: %s", page,size, order));
         IGetAllProductUseCase.GetAllProductDataIn dataIn = new IGetAllProductUseCase.GetAllProductDataIn(
                 page,
                 size,

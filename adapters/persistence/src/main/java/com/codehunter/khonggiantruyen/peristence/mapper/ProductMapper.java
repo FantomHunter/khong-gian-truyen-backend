@@ -29,7 +29,7 @@ public class ProductMapper {
         );
     }
 
-    public ICreateSimpleProductUseCase.CreateSimpleProductDataOut maptoCreateSimpleProductDataOut(ProductDao productDao) {
+    public ICreateSimpleProductUseCase.CreateSimpleProductDataOut mapToCreateSimpleProductDataOut(ProductDao productDao) {
         return new ICreateSimpleProductUseCase.CreateSimpleProductDataOut(mapToProduct(productDao));
     }
 
@@ -46,5 +46,41 @@ public class ProductMapper {
         );
     }
 
+    public ProductDao mapToProductDao(Product product) {
+        return new ProductDao(
+                product.getId().getValue(),
+                product.getName(),
+                product.getDescription(),
+                product.getImageUrl(),
+                new Timestamp(product.getPublishDate().getTime()).toLocalDateTime(),
+                product.getTotalChapter(),
+                product.getStatus(),
+                product.getType(),
+                null,
+                Collections.EMPTY_LIST,
+                Collections.EMPTY_LIST,
+                Collections.EMPTY_LIST,
+                Collections.EMPTY_LIST,
+                Collections.EMPTY_LIST
+        );
+    }
 
+    public ProductDao mapToProductDaoWithTarget(Product product, ProductDao productDao) {
+        return new ProductDao(
+                product.getId().getValue() != null ? product.getId().getValue() : productDao.getId(),
+                product.getName()!=null? product.getName(): productDao.getName(),
+                product.getDescription()!= null? product.getDescription(): productDao.getDescription(),
+                product.getImageUrl()!= null ? product.getImageUrl():productDao.getImageUrl(),
+                product.getPublishDate()!= null?new Timestamp(product.getPublishDate().getTime()).toLocalDateTime(): productDao.getPublishDate(),
+                product.getTotalChapter() != null? product.getTotalChapter(): productDao.getTotalChapter(),
+                product.getStatus()!=null? product.getStatus():productDao.getStatus(),
+                product.getType()!=null? product.getType(): productDao.getType(),
+                productDao.getAuthor(),
+                productDao.getCategoryList(),
+                productDao.getResourceDownloadList(),
+                productDao.getLikedList(),
+                productDao.getCommentedList(),
+                productDao.getRatingList()
+        );
+    }
 }
