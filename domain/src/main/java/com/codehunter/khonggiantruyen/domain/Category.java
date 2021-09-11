@@ -1,13 +1,11 @@
 package com.codehunter.khonggiantruyen.domain;
 
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 @AllArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class Category {
     @Getter
     private final Long id;
