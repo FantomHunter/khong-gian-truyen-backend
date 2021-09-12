@@ -15,7 +15,7 @@ public class CreateCategoryService implements ICreateCategoryUseCase {
 
     @Override
     public CreateCategoryDataOut createCategory(CreateCategoryDataIn dataIn) {
-        log.info("create new category {}", dataIn);
+        log.info("Create new category {}", dataIn);
         return createCategoryPort.createCategory(dataIn);
     }
 }

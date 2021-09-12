@@ -26,7 +26,7 @@ public class UpdateProductController implements IUpdateProductApi {
 
     @Override
     public UpdateProductResponse updateProduct(UpdateProductRequest in) {
-        log.info("updateProduct: " + in);
+        log.info("UpdateProduct: " + in);
         try {
             IUpdateProductUseCase.UpdateProductDataOut out = updateProductUseCase.updateProduct(new IUpdateProductUseCase.UpdateProductDataIn(productApiMapper.mapToProduct(in.getProduct())));
             return new UpdateProductResponse(productApiMapper.mapToProductDto(out.getProduct()));

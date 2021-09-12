@@ -21,7 +21,7 @@ public class GetAllProductController implements IGetAllProductApi {
 
     @Override
     public GetAllProductResponse getAllProduct(@RequestParam Integer page, @RequestParam Integer size, @RequestParam EOrder order) {
-        log.info(String.format("getAllProduct from page: %d with size: %d by order: %s", page,size, order));
+        log.info(String.format("GetAllProduct from page: %d with size: %d by order: %s", page,size, order));
         IGetAllProductUseCase.GetAllProductDataIn dataIn = new IGetAllProductUseCase.GetAllProductDataIn(
                 page,
                 size,

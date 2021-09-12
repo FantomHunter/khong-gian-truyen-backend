@@ -22,7 +22,7 @@ public class DeleteProductController implements IDeleteProductApi {
 
     @Override
     public DeleteProductResponse deleteProduct(Long id) {
-        log.info(String.format("deleteProduct id: %d", id));
+        log.info(String.format("DeleteProduct id: %d", id));
         try {
             deleteProductUseCase.deleteProduct(new IDeleteProductUseCase.DeleteProductDataIn(id));
             return new DeleteProductResponse(String.format(DELETE_PRODUCT_SUCCESS, id));

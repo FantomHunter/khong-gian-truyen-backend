@@ -10,7 +10,7 @@ public interface ICreateCategoryUseCase {
     CreateCategoryDataOut createCategory(CreateCategoryDataIn dataIn);
 
     @Value
-    @EqualsAndHashCode
+    @EqualsAndHashCode(callSuper = false)
     class CreateCategoryDataIn extends SelfValidating<CreateCategoryDataIn> {
         @NonNull
         String name;
@@ -22,7 +22,7 @@ public interface ICreateCategoryUseCase {
     }
 
     @Value
-    @EqualsAndHashCode
+    @EqualsAndHashCode(callSuper = false)
     class CreateCategoryDataOut extends SelfValidating<CreateCategoryDataOut> {
         Category category;
     }

@@ -23,7 +23,7 @@ public class CreateSimpleProductController implements ICreateSimpleProductApi {
 
     @Override
     public CreateSimpleProductResponse createSimpleProduct(CreateSimpleProductRequest request) {
-        log.info(String.format("createSimpleProduct: %s", request));
+        log.info(String.format("CreateSimpleProduct: %s", request));
         ICreateSimpleProductUseCase.CreateSimpleProductDataIn dataIn = new ICreateSimpleProductUseCase.CreateSimpleProductDataIn(
                 request.getDescription(),
                 request.getImageUrl(),
