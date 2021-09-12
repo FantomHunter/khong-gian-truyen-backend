@@ -18,7 +18,7 @@ public class DeleteProductService implements IDeleteProductUseCase {
     @Override
     public void deleteProduct(DeleteProductDataIn in) throws EntityNotFoundException {
         if (!hasProductPort.hasProductWithId(in.getId())){
-            throw new EntityNotFoundException("product not found");
+            throw new EntityNotFoundException("Product not found");
         }
         deleteProductPort.deleteProduct(in);
 
