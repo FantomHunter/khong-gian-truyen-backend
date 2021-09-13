@@ -4,9 +4,10 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CategoryDto {
     @NonNull
-    private final Long id;
-    private final String name;
+    private Long id;
+    private String name;
 }

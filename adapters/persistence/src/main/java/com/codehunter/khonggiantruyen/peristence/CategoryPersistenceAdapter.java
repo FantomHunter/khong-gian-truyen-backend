@@ -1,13 +1,12 @@
 package com.codehunter.khonggiantruyen.peristence;
 
 import com.codehunter.khonggiantruyen.PersistenceAdapter;
+import com.codehunter.khonggiantruyen.core.exception.EntityNotFoundException;
 import com.codehunter.khonggiantruyen.core.port.in.ICreateCategoryUseCase;
 import com.codehunter.khonggiantruyen.core.port.in.IDeleteCategoryUseCase;
 import com.codehunter.khonggiantruyen.core.port.in.IGetAllCategoryUseCase;
-import com.codehunter.khonggiantruyen.core.port.out.ICreateCategoryPort;
-import com.codehunter.khonggiantruyen.core.port.out.IDeleteCategoryPort;
-import com.codehunter.khonggiantruyen.core.port.out.IGetAllCategoryPort;
-import com.codehunter.khonggiantruyen.core.port.out.IHasCategoryPort;
+import com.codehunter.khonggiantruyen.core.port.in.IUpdateCategoryUseCase;
+import com.codehunter.khonggiantruyen.core.port.out.*;
 import com.codehunter.khonggiantruyen.domain.Category;
 import com.codehunter.khonggiantruyen.peristence.entity.CategoryDao;
 import com.codehunter.khonggiantruyen.peristence.mapper.CategoryMaper;
@@ -23,7 +22,7 @@ import static java.util.stream.Collectors.toList;
 @PersistenceAdapter
 @AllArgsConstructor
 @Slf4j
-public class CategoryPersistenceAdapter implements ICreateCategoryPort, IGetAllCategoryPort, IDeleteCategoryPort, IHasCategoryPort {
+public class CategoryPersistenceAdapter implements ICreateCategoryPort, IGetAllCategoryPort, IDeleteCategoryPort, IHasCategoryPort, IUpdateCategoryPort {
     private final CategoryRepository categoryRepository;
     private final CategoryMaper categoryMaper;
 
@@ -56,5 +55,15 @@ public class CategoryPersistenceAdapter implements ICreateCategoryPort, IGetAllC
     @Override
     public Boolean hasCategoryWithId(@NonNull Long id) {
         return categoryRepository.findById(id).isPresent();
+    }
+
+    @Override
+    public IUpdateCategoryUseCase.UpdateCategoryDataOut updateCategory(IUpdateCategoryUseCase.UpdateCategoryDataIn data) throws EntityNotFoundException {
+        CategoryDao categoryDao = categoryRepository.save(CategoryDao.builder()
+                .id(data.getCategory().getId())
+                .name(data.getCategory().getName())
+                .build());
+        return new IUpdateCategoryUseCase.UpdateCategoryDataOut(
+                categoryMaper.mapToCategory(categoryDao));
     }
 }
