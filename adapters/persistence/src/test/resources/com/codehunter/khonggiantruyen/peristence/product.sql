@@ -41,3 +41,10 @@ VALUES('2020-10-18 16:00:00.0', 'user 2 comment', 2, 'user-2');
 INSERT INTO comment
 (commented_at, content, product_id, user_id)
 VALUES('2020-10-18 16:00:00.0', 'user 1 comment', 3, 'user-1');
+
+INSERT INTO category
+(name)
+VALUES('category 1');
+INSERT INTO category
+(name)
+VALUES('category 2');

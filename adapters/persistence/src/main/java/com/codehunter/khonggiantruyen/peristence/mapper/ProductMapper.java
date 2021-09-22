@@ -3,13 +3,18 @@ package com.codehunter.khonggiantruyen.peristence.mapper;
 import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
 import com.codehunter.khonggiantruyen.domain.Product;
 import com.codehunter.khonggiantruyen.peristence.entity.ProductDao;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class ProductMapper {
+    private final CategoryMaper categoryMaper;
+
     public ProductDao mapToProductDao(ICreateSimpleProductUseCase.CreateSimpleProductDataIn dataIn) {
         return new ProductDao(
                 null,
@@ -42,7 +47,11 @@ public class ProductMapper {
                 Timestamp.valueOf(productDao.getPublishDate()),
                 productDao.getStatus(),
                 productDao.getTotalChapter(),
-                productDao.getType()
+                productDao.getType(),
+                productDao.getCategoryList()
+                        .stream()
+                        .map(categoryMaper::mapToCategory)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -68,13 +77,13 @@ public class ProductMapper {
     public ProductDao mapToProductDaoWithTarget(Product product, ProductDao productDao) {
         return new ProductDao(
                 product.getId().getValue() != null ? product.getId().getValue() : productDao.getId(),
-                product.getName()!=null? product.getName(): productDao.getName(),
-                product.getDescription()!= null? product.getDescription(): productDao.getDescription(),
-                product.getImageUrl()!= null ? product.getImageUrl():productDao.getImageUrl(),
-                product.getPublishDate()!= null?new Timestamp(product.getPublishDate().getTime()).toLocalDateTime(): productDao.getPublishDate(),
-                product.getTotalChapter() != null? product.getTotalChapter(): productDao.getTotalChapter(),
-                product.getStatus()!=null? product.getStatus():productDao.getStatus(),
-                product.getType()!=null? product.getType(): productDao.getType(),
+                product.getName() != null ? product.getName() : productDao.getName(),
+                product.getDescription() != null ? product.getDescription() : productDao.getDescription(),
+                product.getImageUrl() != null ? product.getImageUrl() : productDao.getImageUrl(),
+                product.getPublishDate() != null ? new Timestamp(product.getPublishDate().getTime()).toLocalDateTime() : productDao.getPublishDate(),
+                product.getTotalChapter() != null ? product.getTotalChapter() : productDao.getTotalChapter(),
+                product.getStatus() != null ? product.getStatus() : productDao.getStatus(),
+                product.getType() != null ? product.getType() : productDao.getType(),
                 productDao.getAuthor(),
                 productDao.getCategoryList(),
                 productDao.getResourceDownloadList(),

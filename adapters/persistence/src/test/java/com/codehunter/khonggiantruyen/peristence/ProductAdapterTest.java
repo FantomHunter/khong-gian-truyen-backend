@@ -1,15 +1,16 @@
 package com.codehunter.khonggiantruyen.peristence;
 
 import com.codehunter.khonggiantruyen.core.exception.EntityNotFoundException;
-import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
-import com.codehunter.khonggiantruyen.core.port.in.IDeleteProductUseCase;
-import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
-import com.codehunter.khonggiantruyen.core.port.in.IUpdateProductUseCase;
+import com.codehunter.khonggiantruyen.core.port.in.*;
 import com.codehunter.khonggiantruyen.domain.EProductStatus;
 import com.codehunter.khonggiantruyen.domain.EProductType;
 import com.codehunter.khonggiantruyen.domain.Product;
+import com.codehunter.khonggiantruyen.peristence.entity.CategoryDao;
 import com.codehunter.khonggiantruyen.peristence.entity.CommentDao;
+import com.codehunter.khonggiantruyen.peristence.entity.ProductDao;
+import com.codehunter.khonggiantruyen.peristence.mapper.CategoryMaper;
 import com.codehunter.khonggiantruyen.peristence.mapper.ProductMapper;
+import com.codehunter.khonggiantruyen.peristence.repository.CategoryRepository;
 import com.codehunter.khonggiantruyen.peristence.repository.CommentRepository;
 import com.codehunter.khonggiantruyen.peristence.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
-@Import({ProductPersistenceAdapter.class, ProductMapper.class})
+@Import({ProductPersistenceAdapter.class, ProductMapper.class, CategoryMaper.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ProductAdapterTest {
     @Autowired
@@ -37,6 +38,8 @@ public class ProductAdapterTest {
     ProductRepository productRepository;
     @Autowired
     CommentRepository commentRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Test
     void createSimpleProduct_withValidInput_thenNewProductReturn() {
@@ -50,7 +53,8 @@ public class ProductAdapterTest {
                         publishDate,
                         EProductStatus.PUBLISHING,
                         300,
-                        EProductType.TRANSLATED
+                        EProductType.TRANSLATED,
+                        null
                 )
         );
 
@@ -157,7 +161,8 @@ public class ProductAdapterTest {
                         publishDate,
                         EProductStatus.PUBLISHING,
                         300,
-                        EProductType.TRANSLATED
+                        EProductType.TRANSLATED,
+                        null
                 )
         ));
 
@@ -171,4 +176,26 @@ public class ProductAdapterTest {
         // the comment of the product is still kept
         assertEquals(6, commentRepository.findAll().size());
     }
+
+    @Test
+    @Sql("product.sql")
+    void addCategoryToProduct_withExistedCategoryAndProduct_thenSuccess() throws EntityNotFoundException {
+        // before
+        ProductDao productDaoBefore = productRepository.findById(1L).orElse(null);
+        assertNotNull(productDaoBefore);
+        assertNotNull(productDaoBefore.getCategoryList());
+        assertEquals(0,productDaoBefore.getCategoryList().size());
+        CategoryDao categoryDao = categoryRepository.findById(1L).orElse(null);
+        assertNotNull(categoryDao);
+
+        adapterUnderTest.addCategoryToProduct(new IAddCategoryToProductUseCase.AddCategoryToProductDataIn(1L, 1L));
+
+        ProductDao productDaoAfter = productRepository.findById(1L).orElse(null);
+        assertNotNull(productDaoAfter);
+        assertNotNull(productDaoAfter.getCategoryList());
+        assertEquals(1,productDaoAfter.getCategoryList().size());
+
+
+    }
+
 }

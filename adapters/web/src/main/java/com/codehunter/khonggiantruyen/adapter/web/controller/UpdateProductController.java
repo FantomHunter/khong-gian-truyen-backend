@@ -28,7 +28,8 @@ public class UpdateProductController implements IUpdateProductApi {
     public UpdateProductResponse updateProduct(UpdateProductRequest in) {
         log.info("UpdateProduct: " + in);
         try {
-            IUpdateProductUseCase.UpdateProductDataOut out = updateProductUseCase.updateProduct(new IUpdateProductUseCase.UpdateProductDataIn(productApiMapper.mapToProduct(in.getProduct())));
+            IUpdateProductUseCase.UpdateProductDataOut out = updateProductUseCase.updateProduct(
+                    new IUpdateProductUseCase.UpdateProductDataIn(productApiMapper.mapToProduct(in.getProduct())));
             return new UpdateProductResponse(productApiMapper.mapToProductDto(out.getProduct()));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product not found");

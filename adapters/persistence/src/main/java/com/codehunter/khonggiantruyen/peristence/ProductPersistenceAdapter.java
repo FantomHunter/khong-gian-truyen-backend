@@ -2,14 +2,13 @@ package com.codehunter.khonggiantruyen.peristence;
 
 import com.codehunter.khonggiantruyen.PersistenceAdapter;
 import com.codehunter.khonggiantruyen.core.exception.EntityNotFoundException;
-import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
-import com.codehunter.khonggiantruyen.core.port.in.IDeleteProductUseCase;
-import com.codehunter.khonggiantruyen.core.port.in.IGetAllProductUseCase;
-import com.codehunter.khonggiantruyen.core.port.in.IUpdateProductUseCase;
+import com.codehunter.khonggiantruyen.core.port.in.*;
 import com.codehunter.khonggiantruyen.core.port.out.*;
 import com.codehunter.khonggiantruyen.domain.Product;
+import com.codehunter.khonggiantruyen.peristence.entity.CategoryDao;
 import com.codehunter.khonggiantruyen.peristence.entity.ProductDao;
 import com.codehunter.khonggiantruyen.peristence.mapper.ProductMapper;
+import com.codehunter.khonggiantruyen.peristence.repository.CategoryRepository;
 import com.codehunter.khonggiantruyen.peristence.repository.ProductRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @PersistenceAdapter
 @Slf4j
-public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllProductPort, IDeleteProductPort, IHasProductPort, IUpdateProductPort {
+public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllProductPort, IDeleteProductPort, IHasProductPort, IUpdateProductPort, IAddCategoryToProductPort {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public ICreateSimpleProductUseCase.CreateSimpleProductDataOut createSimpleProduct(ICreateSimpleProductUseCase.CreateSimpleProductDataIn in) {
@@ -83,10 +83,22 @@ public class ProductPersistenceAdapter implements ICreateProductPort, IGetAllPro
     @Override
     public IUpdateProductUseCase.UpdateProductDataOut updateProduct(IUpdateProductUseCase.UpdateProductDataIn in) throws EntityNotFoundException {
         Optional<ProductDao> productDao = productRepository.findById(in.getProduct().getId().getValue());
-        if (productDao.isPresent()){
+        if (productDao.isPresent()) {
             ProductDao productDaoUpdate = productRepository.save(productMapper.mapToProductDaoWithTarget(in.getProduct(), productDao.get()));
             return new IUpdateProductUseCase.UpdateProductDataOut(productMapper.mapToProduct(productDaoUpdate));
         }
         throw new EntityNotFoundException("Product not found");
+    }
+
+    @Override
+    public void addCategoryToProduct(IAddCategoryToProductUseCase.AddCategoryToProductDataIn dataIn) throws EntityNotFoundException {
+        ProductDao productDao = productRepository.findById(dataIn.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        CategoryDao categoryDao = categoryRepository.findById(dataIn.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        if (!productDao.getCategoryList().contains(categoryDao)) {
+            productDao.getCategoryList().add(categoryDao);
+            productRepository.save(productDao);
+        }
     }
 }

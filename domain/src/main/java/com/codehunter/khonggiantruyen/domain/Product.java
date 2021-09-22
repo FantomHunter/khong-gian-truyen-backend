@@ -3,6 +3,7 @@ package com.codehunter.khonggiantruyen.domain;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -23,6 +24,8 @@ public class Product {
     private final Integer totalChapter;
     @Getter
     private final EProductType type;
+    @Getter
+    private final List<Category> categoryList;
 
     @Value
     public static class ProductId {
