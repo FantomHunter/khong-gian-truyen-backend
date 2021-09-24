@@ -1,8 +1,6 @@
 package com.codehunter.khonggiantruyen.peristence.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "author")
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthorDao {
