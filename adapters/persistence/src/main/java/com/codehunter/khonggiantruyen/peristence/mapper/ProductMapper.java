@@ -1,6 +1,7 @@
 package com.codehunter.khonggiantruyen.peristence.mapper;
 
 import com.codehunter.khonggiantruyen.core.port.in.ICreateSimpleProductUseCase;
+import com.codehunter.khonggiantruyen.domain.Author;
 import com.codehunter.khonggiantruyen.domain.Product;
 import com.codehunter.khonggiantruyen.peristence.entity.ProductDao;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -51,7 +53,10 @@ public class ProductMapper {
                 productDao.getCategoryList()
                         .stream()
                         .map(categoryMaper::mapToCategory)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                Optional.ofNullable(productDao.getAuthor())
+                        .map(authorDao -> new Author(authorDao.getId(), authorDao.getName()))
+                        .orElse(null)
         );
     }
 

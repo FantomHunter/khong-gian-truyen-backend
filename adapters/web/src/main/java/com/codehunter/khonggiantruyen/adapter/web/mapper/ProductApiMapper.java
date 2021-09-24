@@ -1,5 +1,6 @@
 package com.codehunter.khonggiantruyen.adapter.web.mapper;
 
+import com.codehunter.khonggiantruyen.adapter.web.api.common.AuthorDto;
 import com.codehunter.khonggiantruyen.adapter.web.api.common.EProductStatus;
 import com.codehunter.khonggiantruyen.adapter.web.api.common.EProductType;
 import com.codehunter.khonggiantruyen.adapter.web.api.common.ProductDto;
@@ -31,7 +32,14 @@ public class ProductApiMapper {
                         .orElseGet(Stream::empty)
                         .filter(Objects::nonNull)
                         .map(categoryApiMapper::mapToCategoryDto)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                Optional.ofNullable(product.getAuthor())
+                        .map(author -> AuthorDto.builder()
+                                .id(author.getId())
+                                .name(author.getName())
+                                .build())
+                        .orElse(null)
+
         );
     }
 
@@ -51,6 +59,7 @@ public class ProductApiMapper {
                 com.codehunter.khonggiantruyen.domain.EProductStatus.valueOf(productDto.getStatus().toString()),
                 productDto.getTotalChapter(),
                 com.codehunter.khonggiantruyen.domain.EProductType.valueOf(productDto.getType().toString()),
+                null,
                 null
         );
     }

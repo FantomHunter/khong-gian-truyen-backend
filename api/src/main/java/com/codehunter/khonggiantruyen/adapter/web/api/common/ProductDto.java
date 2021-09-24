@@ -1,16 +1,15 @@
 package com.codehunter.khonggiantruyen.adapter.web.api.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProductDto {
     @NotEmpty
     private Long id;
@@ -24,4 +23,5 @@ public class ProductDto {
     private Integer totalChapter;
     private EProductType type;
     private List<CategoryDto> categoryList;
+    private AuthorDto author;
 }

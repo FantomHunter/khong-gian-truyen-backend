@@ -54,6 +54,7 @@ public class ProductAdapterTest {
                         EProductStatus.PUBLISHING,
                         300,
                         EProductType.TRANSLATED,
+                        null,
                         null
                 )
         );
@@ -162,6 +163,7 @@ public class ProductAdapterTest {
                         EProductStatus.PUBLISHING,
                         300,
                         EProductType.TRANSLATED,
+                        null,
                         null
                 )
         ));
